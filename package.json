@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
+    "build": "chmod +x node_modules/.bin/hexo && hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "postinstall": "chmod +x node_modules/.bin/hexo"
   },
   "hexo": {
     "version": "7.3.0"
