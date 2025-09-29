@@ -179,7 +179,7 @@ site_state: true
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
 social:
   GitHub: https://github.com/LunarStore || github
-  163: mailto:18772124875@163.com || fas fa-envelope
+  网易邮箱: mailto:18772124875@163.com || fas fa-envelope
   #E-Mail: mailto:yourname@gmail.com || envelope
   #Weibo: https://weibo.com/yourname || weibo
   #Google: https://plus.google.com/yourname || google
