@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3">
+  <diagram name="第 1 页" id="GDhB30cbO2FFqtUHsgPK">
+    <mxGraphModel dx="1205" dy="1942" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--1" value="Disk IO Driver" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="360" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--2" value="Buffer Cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--3" value="Virtual File System" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="360" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--4" value="File Operation Wrap" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--5" value="Transaction" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--6" value="File System Call" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="360" y="-60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--7" value="磁盘IO驱动层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="255" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--8" value="（使用LRU算法）磁盘块缓存层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="192.5" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--9" value="（WAL）事务层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="132.5" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--10" value="虚拟文件系统实现层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="80" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--11" value="文件操作封装层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="12.5" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--12" value="文件系统调用层" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="-47.5" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="mzWwlQBXNYLuQQoq7Qy--13" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;XV6 文件系统的实现架构&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="-160" width="320" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3">
+  <diagram name="第 1 页" id="7svMwHcqpEIevkdaZ5rr">
+    <mxGraphModel dx="1004" dy="644" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-1" value="磁盘IO请求，分配任务句柄req" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="150" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-2" value="将req按升序插到请求队列" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-3" value="请求队列原来为空？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="410" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-4" value="任务阻塞" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="60" y="555" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-5" value="req执行IO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-6" value="依据电梯算法，获取紧挨着req的任务reqnext" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="805.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-7" value="从请求队列当中移除req" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="935.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-1" target="Vw-CS6EbZ4Lh2c8bF3Zc-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="530" as="sourcePoint" />
+            <mxPoint x="500" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-2" target="Vw-CS6EbZ4Lh2c8bF3Zc-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="530" as="sourcePoint" />
+            <mxPoint x="500" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-3" target="Vw-CS6EbZ4Lh2c8bF3Zc-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="450" as="sourcePoint" />
+            <mxPoint x="480" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-12" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-3" target="Vw-CS6EbZ4Lh2c8bF3Zc-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="530" as="sourcePoint" />
+            <mxPoint x="520" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389.5" y="740" as="sourcePoint" />
+            <mxPoint x="389.5" y="805" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="Vw-CS6EbZ4Lh2c8bF3Zc-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389.5" y="865.5" as="sourcePoint" />
+            <mxPoint x="389.5" y="930.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-15" value="否" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="450" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-16" value="是" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="390" y="490" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-19" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;dashed=1;dashPattern=8 8;fillColor=#d5e8d4;strokeColor=#82b366;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="650" as="sourcePoint" />
+            <mxPoint x="390" y="640" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="190" y="640" />
+              <mxPoint x="310" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-20" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="Vw-CS6EbZ4Lh2c8bF3Zc-21">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="1100.5" as="sourcePoint" />
+            <mxPoint x="80" y="620" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="80" y="1101" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-21" value="唤醒reqnext" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="330" y="1070" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Vw-CS6EbZ4Lh2c8bF3Zc-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="Vw-CS6EbZ4Lh2c8bF3Zc-21">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389" y="995.5" as="sourcePoint" />
+            <mxPoint x="389.5" y="1066" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
