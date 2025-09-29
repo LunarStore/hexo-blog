@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
-    "clean": "hexo clean",
+    "build": "node build.js",
+    "clean": "node -e \"require('hexo')().call('clean').then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });\"",
     "deploy": "hexo deploy",
     "server": "hexo server"
   },
