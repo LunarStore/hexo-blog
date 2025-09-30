@@ -13,7 +13,7 @@ tags:
 - Hexo基本环境搭建: [https://blog.csdn.net/weixin_45019350/article/details/121901433](https://blog.csdn.net/weixin_45019350/article/details/121901433)。
 - NexT主题仓库：[https://github.com/theme-next/hexo-theme-next](https://github.com/theme-next/hexo-theme-next)
 - NexT主题使用配置教程：[NexT主题使用配置教程文档](https://hexo-next.readthedocs.io/zh-cn/latest/next/)
-_ Vercel部署Hexo博文：[vercel部署hexo](https://www.chipmunk.top/posts/Vercel%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/)
+- Vercel部署Hexo博文：[vercel部署hexo](https://www.chipmunk.top/posts/Vercel%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/)
 
 也是一时兴起，花了两三天时间使用Hexo搭建了一个个人博客，个人博客链接： [https://www.halfmantou.xyz/](https://www.halfmantou.xyz/) 。目前已经将CSDN所有的博客迁移过去了。当然为了通用性，CSDN的博客还是会持续同步更新。
 
@@ -74,7 +74,7 @@ hexo server
 
 本小节参考自：[https://blog.csdn.net/weixin_45019350/article/details/121901433](https://blog.csdn.net/weixin_45019350/article/details/121901433)。该文当中还讲解了如何将hexo部署到github。最终是将hexo生成的pulibc目录部署到了github，可以通过形如：https://用户名.github.io/方式去访问。并且也提到了由于github访问速度过慢，采用国内的gitee page的方式部署hexo，但是gitee page 机制在2024年已停止使用。所以找来找去，我采用了 花7块钱买了一个国内域名 + vecerl + github的部署方式。成功保证国内可以流程访问我的个人博客，具体部署方式在后面小结进行详细讲解。
 
-## 移植换主题
+## 移植主题
 
 挑来挑去，我最终选择了NextT主题：[https://github.com/theme-next/hexo-theme-next](https://github.com/theme-next/hexo-theme-next)，具体主题的移植方式可以参考github仓库docs当中的 [文档](https://github.com/theme-next/hexo-theme-next/blob/master/docs/INSTALLATION.md)。该文档是对linux用户友好的，使用的是curl命令组合。在win用户可以直接把发布的最新版本下载下来，然后解压到themes目录，重命名为next。然后修改顶层_config.yml文件：
 
@@ -230,7 +230,7 @@ git remote add origin https://github.com/LunarStore/hexo-blog.git
 git push -u origin main
 ```
 
-然后就是注册vercel账号、创建vercel项目、购买一个国内域名、为域名设置记录等操作。具体流程可以参考：[vercel部署hexo](https://www.chipmunk.top/posts/Vercel%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/)。根据链接一步步来按道理是没有问题。在我们每次更新博文后忽略pulibc等目录，将md和配置更新部分推送到github，vercel会自动到github仓库拉取最新代码，然后编译部署。
+然后就是注册vercel账号、创建vercel项目、购买一个国内域名、为域名设置记录等操作。具体流程可以参考：[vercel部署hexo](https://www.chipmunk.top/posts/Vercel%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/)。根据链接一步步来按道理是没有问题。每次更新博文后注意忽略pulibc等目录，最好将无需推送的文件放到ignore目录。仅将md和配置更新部分推送到github，vercel会自动到github仓库拉取最新代码，然后编译部署。
 
 但总是有意外，vercel拉取仓库后，在 Hexo build 阶段报错：
 
