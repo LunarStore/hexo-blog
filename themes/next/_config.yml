@@ -635,7 +635,7 @@ livere_uid: # <your_uid>
 # Gitalk
 # For more information: https://gitalk.github.io, https://github.com/gitalk/gitalk
 gitalk:
-  enable: true
+  enable: false
   github_id: LunarStore # GitHub repo owner
   repo: hexo-blog # Repository name to store issues
   client_id: Ov23liOZUgwO7CQMYXow # GitHub Application Client ID
