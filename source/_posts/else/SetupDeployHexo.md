@@ -67,7 +67,7 @@ hexo server
 
 目前项目结构如下：
 
-![](./SetupDeployHexo/file_structure.png)
+![](./SetupDeployHexo/photo/file_structure.png)
 
 - public: `hexo generate` 命令生成的html静态网页。
 - source: 我们.md博客存放的目录。主要放在_posts文件夹下。
@@ -125,7 +125,7 @@ console.info&&console.info("update link as:-->"+ src);
 
 这么改确实可以解决在我们点进文章后，图片加载失败的问题。但是我后来发现，在首页预览文章时，如果带有图片，图片还是没加载出来，经过浏览器抓包，文章内部图片请求路径没有问题，但是首页请求图像路径还是存在问题。**最终调试hexo-asset-image的代码发现首页请求的路径居然是相对路径。**
 
-![](./SetupDeployHexo/image_show1.png)
+![](./SetupDeployHexo/photo/image_show1.png)
 
 其实应该这么改：
 
@@ -244,7 +244,7 @@ sh: line 1: /vercel/path0/node_modules/.bin/hexo: Permission denied Error: Comma
 
 目前我的Vercel项目 Build Command、Output Directory、 Install Command配置如下：
 
-![](./SetupDeployHexo/vercel_cmd.png)
+![](./SetupDeployHexo/photo/vercel_cmd.png)
 
 build.js脚本如下：
 
