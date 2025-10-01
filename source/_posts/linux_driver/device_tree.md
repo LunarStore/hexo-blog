@@ -1,6 +1,7 @@
 ---
 title: Linux驱动开发——设备树随记
 date: 2024-11-17 12:00:00
+categories: 驱动开发
 tags:
   - 驱动开发
 ---

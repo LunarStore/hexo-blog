@@ -1,6 +1,7 @@
 ---
 title: MIT6.5840（原MIT6.824）Lab2总结（Raft）
 date: 2024-03-09 12:00:00
+categories: 存储
 tags:
   - 存储
 ---

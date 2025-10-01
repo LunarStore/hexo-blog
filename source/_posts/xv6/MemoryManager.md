@@ -1,6 +1,7 @@
 ---
 title: 这才是计科之 Onix & XV6 源码分析（2、类Unix的内存管理）
 date: 2024-06-07 12:00:00
+categories: 操作系统
 tags:
   - 类Unix源码剖析
 ---

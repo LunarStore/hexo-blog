@@ -1,6 +1,7 @@
 ---
 title: LevelDB源码阅读笔记（1、整体架构）
 date: 2024-04-18 12:00:00
+categories: 存储
 tags:
   - 存储
 ---

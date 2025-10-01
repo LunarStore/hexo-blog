@@ -1,6 +1,7 @@
 ---
 title: LevelDB源码阅读笔记（2、SSTable源码分析）
 date: 2024-04-21 12:00:00
+categories: 存储
 tags:
   - 存储
 ---

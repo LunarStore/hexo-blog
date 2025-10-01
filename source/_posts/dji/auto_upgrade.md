@@ -1,6 +1,7 @@
 ---
 title: Payload-SDK自动升级
 date: 2025-06-28 12:00:00
+categories: Linux应用技术笔记
 tags:
   - dji-PSDK
 ---

@@ -1,6 +1,7 @@
 ---
 title: Qt快速入门（MV架构之TableView + QStandardItemModel + 自定义代理小案例）
 date: 2024-04-14 12:00:00
+categories: 前端
 tags:
   - QT
 ---

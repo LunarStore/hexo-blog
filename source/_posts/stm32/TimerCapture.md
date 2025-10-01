@@ -1,6 +1,7 @@
 ---
 title: STM32快速入门（定时器之输入捕获）
 date: 2024-05-08 12:00:00
+categories: 单片机
 tags:
   - STM32
 ---

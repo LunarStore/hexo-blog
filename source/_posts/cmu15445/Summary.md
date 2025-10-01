@@ -1,6 +1,7 @@
 ---
 title: CMU15445实验总结上(Spring 2023)
 date: 2024-02-16 12:00:00
+categories: 存储
 tags:
   - 数据库
 ---

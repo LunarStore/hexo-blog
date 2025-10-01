@@ -1,6 +1,7 @@
 ---
 title: VS2022搭建FFMPEG + Opencv开发环境 + 如何打包项目让程序也能独立跑在其他人的电脑上？
 date: 2024-10-22 12:00:00
+categories: Windows环境笔记
 tags:
   - 杂项
 ---

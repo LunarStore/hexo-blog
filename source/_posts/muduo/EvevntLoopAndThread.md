@@ -1,6 +1,7 @@
 ---
 title: muduo源码阅读笔记（6、EvevntLoop和Thread）
 date: 2024-01-15 12:00:00
+categories: 服务器框架
 tags:
   - 高性能服务器框架
 ---

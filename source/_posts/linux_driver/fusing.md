@@ -1,6 +1,7 @@
 ---
 title: 烧写uboot、linux镜像、根文件系统到开发板
 date: 2024-06-08 12:00:00
+categories: 驱动开发
 tags:
   - 驱动开发
 ---

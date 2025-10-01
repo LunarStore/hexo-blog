@@ -1,6 +1,7 @@
 ---
 title: rkmedia之flow深入浅出
 date: 2025-05-05 12:00:00
+categories: 服务器框架
 tags:
   - Rkmedia
   - 音视频

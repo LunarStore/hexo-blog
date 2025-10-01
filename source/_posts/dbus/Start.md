@@ -1,6 +1,7 @@
 ---
 title: DBus快速入门
 date: 2024-07-28 12:00:00
+categories: Linux应用技术笔记
 tags:
   - DBus
 ---

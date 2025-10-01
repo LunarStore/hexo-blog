@@ -1,6 +1,7 @@
 ---
 title: STM32快速入门（串口传输之USART）
 date: 2024-05-08 12:00:00
+categories: 单片机
 tags:
   - STM32
 ---

@@ -1,6 +1,7 @@
 ---
 title: Angular快速入门
 date: 2024-08-25 12:00:00
+categories: 前端
 tags:
   - Angular
 ---

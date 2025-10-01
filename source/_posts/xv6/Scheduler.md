@@ -1,6 +1,7 @@
 ---
 title: 这才是计科之 Onix & XV6 源码分析（3、Unix-like系统的进程调度模块）
 date: 2024-06-08 12:00:00
+categories: 操作系统
 tags:
   - 类Unix源码剖析
 ---

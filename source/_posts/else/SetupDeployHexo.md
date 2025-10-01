@@ -1,6 +1,7 @@
 ---
 title: Hexo搭建/部署个人博客教程
 date: 2025-09-30 16:37:00
+categories: Linux环境笔记
 tags:
   - 杂项
   - Linux环境笔记

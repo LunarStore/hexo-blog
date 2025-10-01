@@ -1,6 +1,7 @@
 ---
 title: 有关线程局部变量的随记
 date: 2024-09-30 12:00:00
+categories: Linux应用技术笔记
 tags:
   - C++
 ---

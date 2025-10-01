@@ -1,6 +1,7 @@
 ---
 title: Qt快速入门（Opencv小案例之人脸识别）
 date: 2024-04-14 12:00:00
+categories: 前端
 tags:
   - QT
 ---

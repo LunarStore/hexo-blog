@@ -1,6 +1,7 @@
 ---
 title: Ubuntu & CentOS 配置静态IP
 date: 2024-01-21 12:00:00
+categories: Linux环境笔记
 tags:
   - Linux环境笔记
   - 运维

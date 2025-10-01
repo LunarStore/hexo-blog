@@ -1,6 +1,7 @@
 ---
 title: Buildroot实现stage/target安装阶段，在执行原项目当中cmake的instll代码外再执行自定义的安装代码
 date: 2025-09-28 12:00:00
+categories: Linux应用技术笔记
 tags:
   - Linux应用技术笔记
 ---

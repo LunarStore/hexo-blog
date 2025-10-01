@@ -1,6 +1,7 @@
 ---
 title: STM32F103时钟分析
 date: 2024-06-11 12:00:00
+categories: 单片机
 tags:
   - STM32
 ---

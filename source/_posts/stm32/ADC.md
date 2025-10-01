@@ -1,6 +1,7 @@
 ---
 title: STM32快速入门（ADC数模转换）
 date: 2024-06-09 12:00:00
+categories: 单片机
 tags:
   - STM32
 ---

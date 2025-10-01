@@ -1,6 +1,7 @@
 ---
 title: 这才是计科之 Onix & XV6 源码分析（4、文件系统）
 date: 2025-09-28 12:00:00
+categories: 操作系统
 tags:
   - 类Unix源码剖析
 ---

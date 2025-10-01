@@ -1,6 +1,7 @@
 ---
 title: LevelDB源码阅读笔记（0、下载编译leveldb）
 date: 2024-02-15 12:00:00
+categories: 存储
 tags:
   - 存储
 ---

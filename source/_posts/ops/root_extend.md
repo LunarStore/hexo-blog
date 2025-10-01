@@ -1,6 +1,7 @@
 ---
 title: Ubuntu虚拟机使用纯命令行对根分区进行扩展
 date: 2024-06-09 12:00:00
+categories: Linux环境笔记
 tags:
   - Linux环境笔记
   - 运维

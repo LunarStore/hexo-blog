@@ -1,6 +1,7 @@
 ---
 title: Ubuntu使用Docker搭建SonarQube企业版（含破解方法）
 date: 2025-05-15 12:00:00
+categories: Linux环境笔记
 tags:
   - Linux环境笔记
   - 运维

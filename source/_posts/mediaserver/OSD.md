@@ -1,6 +1,7 @@
 ---
 title: OSD实现原理
 date: 2024-11-04 12:00:00
+categories: 音视频
 tags:
   - 音视频
 ---
