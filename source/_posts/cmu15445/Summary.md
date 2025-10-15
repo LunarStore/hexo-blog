@@ -41,7 +41,7 @@ auto BufferPoolManager::NewFrameUnlocked(frame_id_t &frame_id) -> Page *
 
 本实验进行的比较顺利，唯一主要弄清楚的是Frame和Page的区别。
 
-- **Frame(4K):** 就是内存页，相应的frame_id就是Buffer Manager最开始申请的每个内存页的唯一id号。
+- **Frame(4K):** 就是内存页，Frame有两种状态：当Frame没有绑定磁盘页数据时，可以称为空闲内存页；当Frame绑定了磁盘页数据时，也可以称为Page。相应的frame_id就是Buffer Manager最开始申请的每个内存页的唯一id号。
 
 - **Page(4K):** 就是磁盘页，相应的page_id就是磁盘上每一页的id号。
 
@@ -250,7 +250,7 @@ page_id为vn-1的**leaf_page**向right sibling借其最左端的entry，流程�
 
 向right sibling拆借后，parent_page的entry如下：
 
-> ... 、<kn-2, vn-2>、<ki, vn-1>、<ki+1, vn> 、<kn+1, vn+1>、...
+> ... 、<kn-2, vn-2>、<kn-1, vn-1>、<ki+1, vn> 、<kn+1, vn+1>、...
 
 
 **向right sibling合并**

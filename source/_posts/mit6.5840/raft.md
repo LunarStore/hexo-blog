@@ -189,39 +189,168 @@ Raft论文中，认为日志回退加速的优化是没有必要的，因为在�
 
 在AppendEntries RPC的reply中加上两个字段：conflictIndex、conflictTerm 。
 
-对于AppendEntries RPC的接收方
+对于 **AppendEntries RPC的接收方**
 
-- 如果prevLogIndex 不在logs的表示的范围内，就将conflictIndex置为最后一条日志的index + 1，并且conflictTerm为non。
+- **规则一：** 如果prevLogIndex（过大） 不在logs的表示的范围内，就将conflictIndex置为最后一条日志的index + 1，并且conflictTerm为non。
 
-- 如果prevLogIndex 在logs的表示的范围内，但是prevLogTerm对不上，conflictTerm置为本端索引为prevLogIndex的日志的Term，conflictIndex置为Term为conflictTerm的第一个日志的索引。（当然要保证conflictIndex > rf.lastIncludeIndex）
+- **规则二：** 如果prevLogIndex 在logs的表示的范围内，但是prevLogTerm对不上，conflictTerm置为本端索引为prevLogIndex日志的Term，conflictIndex置为 **Term为conflictTerm的第一个日志的索引**。（当然要保证conflictIndex > rf.lastIncludeIndex，如果conflictIndex到等于rf.lastIncludeIndex都没找到的话，将conflictIndex置为rf.lastIncludeIndex，此时leader端会发送自身的快照）
 
-对于AppendEntries RPC的发送方
+对于 **AppendEntries RPC的发送方**
 
-- 如果接收方的logs中有可能找到Term为conflictTerm的日志，将相应的next置为最后一个Term为conflictTerm的日志的index + 1
+- **规则一：** **如果接收方的logs中有可能找到Term为conflictTerm的日志，将相应的next置为最后一个Term为conflictTerm的日志的index + 1**
 
-- 否则，说明既然当前作为Leader的我没有该Term，你Follower就别保留和该Term的日志了，直接将相应的next置为conflictIndex即可。
+- **规则二：** 否则，说明既然当前作为Leader的我没有该Term，你Follower就别保留和该Term的日志了，直接将相应的next置为conflictIndex即可。
 
 官方避坑指南说，可以只实现conflictIndex，我为了偷懒，就是只实现了conflictIndex，最后也能稳定通过测试。
 
+这里比较难以理解应该就是 **AppendEntries RPC的发送方** 的规则一。规则一为什么可以直接将next置为最后一个Term为conflictTerm的日志的index + 1？我们可以用一张图来直观说明这个问题：
 
-### 6. 快照Apply的原子性
+![](./raft/photo/raft_log_back_opt.drawio.png)
 
-这个BUG是我在做lab4时发现的。因为应用层偶尔会出现，日志回退导致出现，except index is n, but is n - 10，的情况，经过痛苦的查看日志。最后发现Follower处理InstallSnapshot RPC的逻辑是：
+图示当中，leader节点准备发送位置为nextIndex以及后面的所有时期为 termM 的日志。但是Follower发现index0处的日志出现不匹配，于是根据上方 **AppendEntries RPC的接收方** 规则二，返回冲突索引 `ConflictIndex = indexi`、冲突时期 `ConflictTerm = termN` 。对于 **AppendEntries RPC的发送方** 来说显然我们的图示是符合规则一的。那么在什么情况下，raft会出现这种局面呢？我的理解是：图示当中Follower相对于Leader来说处在旧的时期（termN），也即Follower的旧Leader突然宕机了，并且indexi之后的时期为termN的日志并未复制到大多数节点上， **而图示当中Follower是作为少数复制了多数termN时期未被提交日志的节点，图示Leader在旧时期（termN）作为Follower没有复制太多termN时期的日志的节点** 。注意这里存在很关键的大小关系： **termM > termN 并且 在第二轮日志复制的请求当中indexi < nextIndex1** 。综上，作为 **AppendEntries RPC的发送方** 我们可以大胆基于规则二去利用conflictTerm加速日志的回退！ 
 
-0. rf.mu.Lock()
+批判思维强的人可能会考虑：nextIndex置为 **最后一个** Term为conflictTerm的日志的索引 + 1？那么，有没有可能存在 **AppendEntries RPC的发送方** 收到 conflictTerm 后，定位到的最后一个任期为 conflictTerm 的日志索引超过nextIndex？我的回答是不可能。因为在日志回退的次轮请求当中，如果Leader节点存在最后一个任期为 conflictTerm 的日志索引超过nextIndex 第一轮rpc请求就应该能成功将日志复制给Follower。
 
-1. 根据快照修改raft层的成员数据
 
-2. rf.mu.Unlock()
+### 6. 快照实现的一堆坑以及疑问
 
-3. 通知后台向应用层Apply快照。
+**快照Apply的原子性:**
 
-这里1、3步骤不是连续的，导致在应用层安装快照前，Raft层有其他协程修改了1中相关的数据成员，就造成了不一致。解决办法是：Raft中增加一个快照计数器，在0到2之间对计数器增1。在其他可能修改1中相关数据成员的地方，在修改前，判断计数器是否为0，不为零就放弃更改。
+> 这个BUG是我在做lab4时发现的。因为应用层偶尔会出现，日志回退导致出现，except index is n, but is n - 10，的情况，经过痛苦的查看日志。最后发现Follower处理InstallSnapshot RPC的逻辑是：
+> 
+> 0. rf.mu.Lock()
+> 
+> 1. 根据快照修改raft层的成员数据
+> 
+> 2. rf.mu.Unlock()
+> 
+> 3. 通知后台向应用层Apply快照。
+> 
+> 这里1、3步骤不是连续的，导致在应用层安装快照前，Raft层有其他协程修改了1中相关的数据成员，就造成了不一致。解决办法是：Raft中增加一个快照计数器，在0到2之间对计数器增1。在其他可能修改1中相关数据成员的地方，在修改前，判断计数器是否为0，不为零就放弃更改。
 
+**为什么InstallSnapshot回调需要将rf.lastApplied置为args.LastIncludeIndex？如果原来rf.lastApplied大于args.LastIncludeIndex不会重复提交日志吗？:**
+
+> 理解将rf.lastApplied置为args.LastIncludeIndex，可以从 MIT6.824/src/raft/config.go 文件对 快照的处理 方式来入手，参考如下：
+> 
+> ```go
+> // returns "" or error string
+> func (cfg *config) ingestSnap(i int, snapshot []byte, index int) string {
+> 	if snapshot == nil {
+> 		log.Fatalf("nil snapshot")
+> 		return "nil snapshot"
+> 	}
+> 	r := bytes.NewBuffer(snapshot)
+> 	d := labgob.NewDecoder(r)
+> 	var lastIncludedIndex int
+> 	var xlog []interface{}
+> 	if d.Decode(&lastIncludedIndex) != nil ||
+> 		d.Decode(&xlog) != nil {
+> 		log.Fatalf("snapshot decode error")
+> 		return "snapshot Decode() error"
+> 	}
+> 	if index != -1 && index != lastIncludedIndex {
+> 		err := fmt.Sprintf("server %v snapshot doesn't match m.SnapshotIndex", i)
+> 		return err
+> 	}
+> 	cfg.logs[i] = map[int]interface{}{}
+> 	for j := 0; j < len(xlog); j++ {
+> 		cfg.logs[i][j] = xlog[j]
+> 	}
+> 	cfg.lastApplied[i] = lastIncludedIndex	// 重点是这一行，测试程序在安装快照后，直接将lastApplied置为了lastIncludedIndex。
+> 	return ""
+> }
+> 
+> const SnapShotInterval = 10
+> 
+> // periodically snapshot raft state
+> func (cfg *config) applierSnap(i int, applyCh chan ApplyMsg) {
+> 	cfg.mu.Lock()
+> 	rf := cfg.rafts[i]
+> 	cfg.mu.Unlock()
+> 	if rf == nil {
+> 		return // ???
+> 	}
+> 
+> 	for m := range applyCh {
+> 		err_msg := ""
+> 		if m.SnapshotValid {
+> 			cfg.mu.Lock()
+> 			err_msg = cfg.ingestSnap(i, m.Snapshot, m.SnapshotIndex)
+> 			cfg.mu.Unlock()
+> 		} else if m.CommandValid {
+> 
+> 			// ...
+> 
+> 			if (m.CommandIndex+1)%SnapShotInterval == 0 {
+> 				w := new(bytes.Buffer)
+> 				e := labgob.NewEncoder(w)
+> 				e.Encode(m.CommandIndex)
+> 				var xlog []interface{}
+> 				for j := 0; j <= m.CommandIndex; j++ {
+> 					xlog = append(xlog, cfg.logs[i][j])
+> 				}
+> 				e.Encode(xlog)
+> 				rf.Snapshot(m.CommandIndex, w.Bytes())
+> 			}
+> 		} else {
+> 			// Ignore other types of ApplyMsg.
+> 		}
+> 	}
+> }
+> ```
+> 
+> 其实按道理来讲，既然都安装新快照了，基于之前快照应用的日志就失去了意义，所以我们的raft层也需要重置lastApplied为从新快照的lastIncludedIndex。即使日志可能apply两次。**注意，这里是apply两次。而不是提交两次！**
 
 ### 7. 对Figure 8的深入理解
 
-关于Figure 8要表达的东西，在这篇文章中讲解的非常清楚了：[https://zhuanlan.zhihu.com/p/369989974](https://zhuanlan.zhihu.com/p/369989974)
+关于Figure 8要表达的东西，在这篇文章中讲解的非常清楚了：[https://zhuanlan.zhihu.com/p/369989974](https://zhuanlan.zhihu.com/p/369989974)，该文讲明白了几个困惑人的问题：
+
+1. raft论文当中Figure 8提到的，提交的日志被覆盖的问题是如何解决的？
+2. 为什么Leader只能提交本任期的日志？（实际上解决了1）
+3. 为什么需要 no-op 日志？（实际上完善了2引入的旧任期日志提交时间过长的问题）
+
+**这里我斗胆将该文的内容拷贝的这里，如有侵权，可以联系我删除！：**
+
+> **正文**
+> 
+> Figure 8 用来说明为什么 Leader 不能提交之前任期的日志，只能通过提交自己任期的日志，从而间接提交之前任期的日志。
+> 
+> ![](./raft/photo/raft_f8_0.png)
+> 
+> 先按 **错误的情况** ，也就是 Leader 可以提交之前任期的日志。那么上述的流程：
+> 
+> - (a) S1 是任期 2 的 Leader(**仔细看，有个黑框**)，日志已经复制到了 S2。
+> - (b) S1 宕机，S5 获得 S3、S4 和 S5 的选票成为 Leader，然后写了一条日志 index=2 & term=3。
+> - (c) S5 刚写完就宕机了，S1 重新当选 Leader，currentTerm = 4， **此刻还没有新的请求进来** ，S1 将 index=2 & term = 2 的日志复制到了 S3，多数派达成，S1 提交了这个日志( **注意，term=2 不是当前任期的日志，我们在讨论错误的情况** )。然后请求进来，刚写了本地 index=3 & term=4 的日志，S1 就故障了。
+> - (d) 这时候 S5 可以通过来自 S2、S3、S4 和自己的投票，重新成为 Leader(currentTerm>=5)，并将 index=2 && term=3 的日志复制到其他所有节点并提交，此时 **index=2 的日志提交了两次** ！一次 term=2，一次term=3，这是绝对不允许发生的，已经提交的日志不能够被覆盖！
+> - (e) 这里的情况是，S1 在宕机之前将自己 term=4 的日志复制到了大多数机器上，这样 S5 就不可能选举成功。这是 S1 不发生故障，正确复制的情况。
+> 
+> 这里主要通过 (c) 和 (d) 来说明问题所在。其实这张图用 Raft 大论文的图会比较好理解。(d) 和 (e) 分别对应 term=4 有没有复制到多数派的情况。
+> 
+> ![](./raft/photo/raft_f8_1.png)
+> 
+> 所以，我们要 **增加提交的约束，不让 (d) 这种情况发生** 。这个约束就是， **Leader 只能提交自己任期的日志** 。
+> 
+> 我们再来看看，加了约束后会变成什么样？前面 (a) 和 (b) 没有任何改变，我们从 (c) 开始。
+> 
+> - (c) 还是将 index=2 & term=2 复制到大多数， **由于 currentTerm = 4，所以不能提交这条日志** 。如果 S1 将 term = 4 的日志复制到多数派，那么 Leader 就可以提交日志，index=2 & term=2 也会间接一起提交，其实这就是 (e) 的情况，1-2-4 都被提交。
+> - (d) 的情况我觉得是理解问题的关键。如果 S1 只将 term=4 写入自己的日志，然后宕机了；S5 选举成功成为 Leader，然后将 index=2 & term=3 的日志复制到所有节点， **现在 index=2 是没有提交过的，S5 能提交 index=2 & term=3 的日志吗？**
+>
+> **答案是不能** 。因为 S5 在 S1(term=4) 选举出来后 currentTerm 至少是 5，也可能是 6、7、8……我们假设就是 5，但这条日志 term = 3， **Leader 不能提交之前任期的日志，所以这条日志是不能提交的** 。只有等到新的请求进来，超过半数节点复制了 1-3-5 后，term=3 的日志才能跟着 term=5 的一起提交。
+>
+> 虽然加了这个约束不会重复提交了，但如果一直没新的请求进来，index=2 & term=3 岂不是就一直不能提交？那这里不就阻塞了吗？如果这里是 kv 数据库，问题就很明显了。假设 (c) 或 (d) 中 index=2 那条日志里的 Command 是 Set("k", "1")，S5 当选 Leader 后，客户端来查询 Get("k")，Leader 查到日志有记录但又不能回复 1 给客户端(因为按照约束这条日志未提交)，线性一致性要求不能返回陈旧的数据，Leader 迫切地需要知道这条日志到底能不能提交。
+> 
+> 所以 raft 论文提到了引入 no-op 日志来解决这个问题。这个在 etcd 中有实现。
+> 
+> **引入 no-op 日志**
+> 
+> no-op 日志即只有 index 和 term 信息，command 信息为空。也是要写到磁盘存储的。
+> 
+> 具体流程是在 Leader 刚选举成功的时候，立即追加一条 no-op 日志，并立即复制到其它节点，no-op 日志一经提交，Leader 前面那些未提交的日志全部间接提交，问题就解决了。像上面的 kv 数据库，有了 no-op 日志之后，Leader 就能快速响应客户端查询了。
+> 
+> 本质上，no-op 日志使 Leader 隐式地快速提交之前任期未提交的日志，确认当前 commitIndex，这样系统才会快速对外正常工作。
+> 
+> > 另外说一句，6.824 的实验不需要实现 no-op 日志。
 
 论文Figure 2中的右下角中：
 
@@ -240,7 +369,9 @@ Raft论文中，认为日志回退加速的优化是没有必要的，因为在�
 
 ### 8. 死锁避免
 
-这里列举一个Raft常见的死锁，虽然课程官方有提到：Raft层在向上层通过applyCh提交日志或快照时，不要占着Raft的锁，因为上层在处理日志时，也会请求Raft的锁。当applyCh满时，会导致Raft层占锁阻塞等待上层去处理日志，而上层处理日志又需要Raft的这把锁，导致日志一直无法被处理，从而造成死锁。
+这里列举一个Raft常见的死锁，虽然课程官方有提到：Raft层在向上层通过applyCh提交日志或快照时，不要占着Raft的锁，因为上层在处理日志时，也会请求Raft的锁。当applyCh满时，会导致Raft层占锁阻塞等待上层去处理日志，而上层处理日志又需要Raft的这把锁，导致日志一直无法被处理，从而造成死锁。更详细一点：
+
+基于上方 **6. 快照实现的一堆坑以及疑问** 所列的applierSnap函数考虑这样一个时序：假设应用协程 applierSnap 执行到了 `rf.Snapshot(m.CommandIndex, w.Bytes())` 这一行，在进入函数之前，raft层正好向 `applyCh` 发送日志或者快照，由于应用协程 applierSnap 正在处理raft层发送的上一条消息，所以 raft层向 `applyCh` 发送日志或者快照的协程就会阻塞，假设阻塞前它是带着raft层的锁的，应用协程 applierSnap 继续执行的 `rf.Snapshot` 函数里面也需要加这把锁，于是形成了死锁局面。所以这里特别强调：**在向rf.applyCh写东西时不要带锁！不然上层rf.applyCh处理函数调用Snapshot也需要带锁，导致死锁局面！**
 
 ---
 
