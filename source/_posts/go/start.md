@@ -1,4 +1,10 @@
-# VScode使用remote ssh远程连接Ubuntu进行GO开发环境搭建
+---
+title: VScode使用remote ssh远程连接Ubuntu进行GO开发环境搭建
+date: 2025-10-15 21:11:23
+categories: Linux环境笔记
+tags:
+  - Golang
+---
 
 ## 正文
 
@@ -11,6 +17,7 @@ sudo wget https://golang.google.cn/dl/go1.22.5.linux-amd64.tar.gz
 
 sudo tar xfz go1.22.5.linux-amd64.tar.gz -C /usr/local
 ```
+<!-- more -->
 
 配置环境变量：
 
